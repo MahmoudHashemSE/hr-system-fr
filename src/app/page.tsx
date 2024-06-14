@@ -2,13 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Button,
-  Drawer,
-  Label,
-  TextInput,
-  Table,
-} from "flowbite-react";
+import { Button, Drawer, Label, TextInput, Table } from "flowbite-react";
 
 export default function Home() {
   const [employees, setEmployees] = useState([]);
@@ -24,7 +18,7 @@ export default function Home() {
 
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get("http://localhost:8080/employees", {
+      const response = await axios.get("https://hr-system-api.azurewebsites.net/employees", {
         withCredentials: true,
       });
       setEmployees(response.data);
@@ -33,13 +27,13 @@ export default function Home() {
     }
   };
 
-  const handleEditClick = (employee) => {
+  const handleEditClick = (employee: any) => {
     setSelectedEmployee(employee);
     setFormData({ name: employee.name, email: employee.email });
     setIsOpen(true);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -47,13 +41,19 @@ export default function Home() {
     }));
   };
 
-  const handleSave = async (e) => {
+  const handleSave = async (e: any) => {
     e.preventDefault();
-    if (selectedEmployee) {
+    const employee: any =
+      selectedEmployee;
+    if (employee) {
       try {
-        await axios.put(`http://localhost:8080/employees/${selectedEmployee._id}`, formData, {
-          withCredentials: true,
-        });
+        await axios.put(
+          `https://hr-system-api.azurewebsites.net/employees/${employee._id}`,
+          formData,
+          {
+            withCredentials: true,
+          }
+        );
         fetchEmployees();
         handleClose();
       } catch (error) {
@@ -79,7 +79,7 @@ export default function Home() {
             </Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
-            {employees.map((employee) => (
+            {employees.map((employee: any) => (
               <Table.Row
                 key={employee._id}
                 className="bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -121,12 +121,12 @@ export default function Home() {
                               Email
                             </Label>
                             <TextInput
-                                id="email"
-                                name="email"
-                                type="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                              />
+                              id="email"
+                              name="email"
+                              type="email"
+                              value={formData.email}
+                              onChange={handleChange}
+                            />
                           </div>
 
                           <div className="mb-6">
